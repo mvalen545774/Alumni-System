@@ -11,6 +11,7 @@ use App\Http\Controllers\Alumni\DashboardController as AlumniDashboardController
 use App\Http\Controllers\Alumni\ProfileController as AlumniProfileController;
 use App\Http\Controllers\Alumni\DirectoryController;
 use App\Http\Controllers\Alumni\JobBoardController;
+use App\Http\Controllers\Alumni\EventController;
 
 // Dashboard redirect after login
 Route::get('/dashboard', function () {
@@ -63,6 +64,15 @@ Route::middleware(['auth', 'approved'])->group(function () {
         Route::get('/job-offers/{id}/edit', [AdminJobOfferController::class, 'edit'])->name('job-offers.edit');
         Route::put('/job-offers/{id}', [AdminJobOfferController::class, 'update'])->name('job-offers.update');
         Route::delete('/job-offers/{id}', [AdminJobOfferController::class, 'destroy'])->name('job-offers.destroy');
+
+        // Event routes
+        Route::get('/events', [App\Http\Controllers\Admin\EventController::class, 'index'])->name('events.index');
+        Route::get('/events/create', [App\Http\Controllers\Admin\EventController::class, 'create'])->name('events.create');
+        Route::post('/events', [App\Http\Controllers\Admin\EventController::class, 'store'])->name('events.store');
+        Route::get('/events/{id}', [App\Http\Controllers\Admin\EventController::class, 'show'])->name('events.show');
+        Route::get('/events/{id}/edit', [App\Http\Controllers\Admin\EventController::class, 'edit'])->name('events.edit');
+        Route::put('/events/{id}', [App\Http\Controllers\Admin\EventController::class, 'update'])->name('events.update');
+        Route::delete('/events/{id}', [App\Http\Controllers\Admin\EventController::class, 'destroy'])->name('events.destroy');
     });
     
     // ALUMNI ROUTES
@@ -81,5 +91,13 @@ Route::middleware(['auth', 'approved'])->group(function () {
         Route::get('/job-board/{id}/edit', [JobBoardController::class, 'edit'])->name('job-board.edit');
         Route::put('/job-board/{id}', [JobBoardController::class, 'update'])->name('job-board.update');
         Route::delete('/job-board/{id}', [JobBoardController::class, 'destroy'])->name('job-board.destroy');
+
+
+        // Event routes
+        Route::resource('events', EventController::class)->except(['show']);
+        Route::get('/events', [EventController::class, 'index'])->name('events.index');
+        Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
+        Route::post('/events/{id}/register', [EventController::class, 'register'])->name('events.register');
+        Route::delete('/events/{id}/cancel', [EventController::class, 'cancelRegistration'])->name('events.cancel');
     });
 });

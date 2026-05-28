@@ -12,9 +12,4 @@ class JobOffer extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function comments()
-    {
-        return $this->hasMany(JobComment::class)->latest();
-    }
 }
